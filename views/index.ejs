@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chat</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/abc91cab4a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="container-item header">
+            <div class="header-item"></div>
+            <div class="header-item">
+                <% if(onlineCount <= 2){%>
+                        <p>User Online</p>
+                   <% }else{ %>
+                        <p>Multiple Users online</P>
+                    <%} %>
+            </div>
+            <div class="header-item">
+                <i class="fa-solid fa-video"></i>
+                <i class="fa-solid fa-phone"></i>
+            </div>
+        </div>
+        <div class="container-item chat-body">
+            <ul id="messages">
+            </ul>
+        </div>
+        <div class="container-item">
+            <form action="" id="form">
+                <input type="text" name="chat" id="chat" autocomplete="off"><button><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const messages = document.getElementById('messages');
+        const input = document.getElementById('chat');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault()
+            if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = ''
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>
